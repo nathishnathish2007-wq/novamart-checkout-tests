@@ -1,0 +1,23 @@
+
+Running 18 tests using 1 worker
+
+  ✓   1 tests/novamart.spec.js:27:3 › Access and accounts › landing page offers sign in and sign up (407ms)
+  ✓   2 tests/novamart.spec.js:34:3 › Access and accounts › signed-out visitors are blocked from the shop and cart (255ms)
+  ✓   3 tests/novamart.spec.js:42:3 › Access and accounts › sign up rejects an invalid mobile number and a wrong code (617ms)
+  ✓   4 tests/novamart.spec.js:58:3 › Access and accounts › sign in works with the right password and explains wrong ones (1.3s)
+  ✓   5 tests/novamart.spec.js:77:3 › Catalogue › search handles partial text, brands and no results (974ms)
+  ✓   6 tests/novamart.spec.js:89:3 › Catalogue › category and price filters work together (853ms)
+  ✓   7 tests/novamart.spec.js:98:3 › Catalogue › out-of-stock products cannot be added (772ms)
+  ✓   8 tests/novamart.spec.js:107:3 › Cart › adding asks for confirmation, cancel adds nothing, duplicates are blocked (1.1s)
+  ✓   9 tests/novamart.spec.js:120:3 › Cart › cannot raise a quantity above the available stock (1.0s)
+  ✓  10 tests/novamart.spec.js:131:3 › Cart › cart and login survive closing and reopening the browser (1.1s)
+  ✓  11 tests/novamart.spec.js:146:3 › Checkout (the three required checks) › Test 1: successful checkout shows one confirmation with a reference (2.0s)
+  ✓  12 tests/novamart.spec.js:158:3 › Checkout (the three required checks) › Test 2: a missing name blocks checkout and keeps what was entered (1.1s)
+  ✓  13 tests/novamart.spec.js:171:3 › Checkout (the three required checks) › Test 3: changing quantity updates the exact total (2 mugs = ₹400) (1.3s)
+  ✓  14 tests/novamart.spec.js:184:3 › Checkout (the three required checks) › empty cart blocks checkout (934ms)
+  ✓  15 tests/novamart.spec.js:193:3 › Checkout (the three required checks) › declined payment shows a message, creates no order and keeps the cart (2.0s)
+  ✓  16 tests/novamart.spec.js:207:3 › Checkout (the three required checks) › cancelling the payment prompt places no order (1.3s)
+  ✓  17 tests/novamart.spec.js:217:3 › Checkout (the three required checks) › rapid double-clicks create exactly one order (2.0s)
+  ✓  18 tests/novamart.spec.js:230:1 › shop is usable on a phone-sized screen (641ms)
+
+  18 passed (20.8s)

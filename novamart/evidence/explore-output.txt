@@ -1,0 +1,5 @@
+A. EMPTY CART -> message: Your cart is empty. Add an item before placing an order.
+A. EMPTY CART -> confirmation shown: false | name kept: Asha Kumar
+B. DOUBLE CLICK -> confirm dialogs open: 1
+B. DOUBLE CLICK -> confirmations: 1 | reference: ORD-JXKK2HRS
+B. DOUBLE CLICK -> orders in history: 1

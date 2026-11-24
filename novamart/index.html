@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NovaMart</title>
+<style>
+:root{--bg:#fffbee;--fg:#16324f;--mut:#5d7389;--card:#fffef9;--head:#eaf5fd;--line:#d3e5f2;--pri:#1b75bb;--pri2:#2f8fd1;--ok:#13795b;--err:#c0392b;--tile:#e3f2fc;color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0e1a26;--fg:#e8f1f8;--mut:#9db4c7;--card:#152636;--head:#122233;--line:#26405a;--pri:#4aa8ee;--pri2:#6cc0f5;--ok:#4cd08a;--err:#ff9a8a;--tile:#1d3347;color-scheme:dark}}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--fg)}
+a{color:var(--pri);text-decoration:none}
+header{position:sticky;top:0;z-index:5;background:var(--head);border-bottom:1px solid var(--line);display:flex;gap:1rem;align-items:center;padding:.7rem 1rem;flex-wrap:wrap}
+.brand{font-weight:800;font-size:1.2rem;background:linear-gradient(90deg,var(--pri),var(--pri2));-webkit-background-clip:text;background-clip:text;color:transparent}
+nav{display:flex;gap:.9rem;margin-left:auto;align-items:center;flex-wrap:wrap}
+.badge{background:var(--pri);color:#fff;border-radius:99px;padding:0 .5rem;font-size:.75rem;margin-left:.2rem}
+main{max-width:1100px;margin:0 auto;padding:1rem}
+.hero{text-align:center;padding:4rem 1rem;background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;border-radius:18px;margin-top:1rem}
+.hero h1{font-size:2.4rem;margin:0 0 .5rem}.hero p{opacity:.92;max-width:34rem;margin:0 auto 1.5rem}
+.btn{display:inline-block;border:1px solid var(--line);background:var(--card);color:var(--fg);padding:.55rem 1.1rem;border-radius:10px;cursor:pointer;font-size:.95rem}
+.btn.p{background:linear-gradient(90deg,var(--pri),var(--pri2));color:#fff;border:0}.btn.w{background:#fffef9;color:#1b75bb;border:0}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.2rem;box-shadow:0 2px 10px rgba(27,117,187,.08)}
+.auth{max-width:430px;margin:2rem auto}label{display:block;margin:.8rem 0 .25rem;font-size:.9rem;font-weight:600}
+input,select,textarea{width:100%;padding:.6rem .7rem;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--fg);font:inherit}
+.err{color:var(--err);font-size:.88rem;margin:.5rem 0}.ok{color:var(--ok)}.mut{color:var(--mut);font-size:.85rem}
+.demo{background:var(--tile);border-radius:9px;padding:.6rem;margin:.6rem 0;font-size:.9rem}
+.bar{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:.6rem;margin:1rem 0}
+@media(max-width:760px){.bar{grid-template-columns:1fr 1fr}.bar input:first-child{grid-column:1/-1}}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1rem}
+.pc{display:flex;flex-direction:column;gap:.35rem}.tile{height:150px;border-radius:10px;background:var(--tile);display:grid;place-items:center;font-size:3.2rem;overflow:hidden}.tile img{width:100%;height:100%;object-fit:cover}
+.price{font-weight:700;font-size:1.1rem}.mrp{text-decoration:line-through;color:var(--mut);font-size:.85rem;margin-left:.3rem}.off{color:var(--ok);font-size:.85rem;margin-left:.3rem}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:.6rem .4rem;border-bottom:1px solid var(--line)}
+.q{display:inline-flex;align-items:center;gap:.4rem}.q button{width:2rem}.q span{min-width:1.6rem;text-align:center}
+.tot{font-size:1.3rem;font-weight:800}
+#modal{position:fixed;inset:0;background:rgba(10,12,30,.55);display:grid;place-items:center;z-index:20}#modal[hidden]{display:none}#modal .card{max-width:380px;width:92%}
+#toast{position:fixed;left:50%;bottom:1.2rem;transform:translateX(-50%);background:#16324f;color:#fff;padding:.7rem 1.1rem;border-radius:10px;z-index:30;max-width:92%}#toast[hidden]{display:none}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}.cols{display:grid;grid-template-columns:1.6fr 1fr;gap:1rem}@media(max-width:760px){.cols,.row2{grid-template-columns:1fr}}
+</style></head>
+<body><div id="app"></div><div id="modal" hidden></div><div id="toast" role="status" hidden></div>
+<script>
+(function(){
+const P=`mug|Coffee Mug|Kitchen|Brewly|200|250|4.4|40|☕|350 ml ceramic mug, microwave and dishwasher safe
+bottle|Insulated Steel Bottle 750 ml|Kitchen|Brewly|549|699|4.3|25|🧴|Double-wall steel, keeps drinks cold 18 h, hot 8 h
+pan|Non-stick Frying Pan 24 cm|Kitchen|Cookora|1299|1699|4.1|12|🍳|Induction-ready base with heat-resistant handle
+spice|Bamboo Spice Rack|Kitchen|Cookora|799|999|4.0|18|🧂|Two-tier rack with 6 glass jars
+mouse|Wireless Mouse|Electronics|Zentro|500|650|4.3|30|🖱️|2.4 GHz wireless, 1600 DPI, silent clicks
+keyboard|Slim Wireless Keyboard|Electronics|Zentro|1199|1599|4.2|17|⌨️|Compact layout, rechargeable, works with 3 devices
+speaker|Pulse Bluetooth Speaker|Electronics|Zentro|1499|1999|4.5|15|🔊|12 W sound, 10 h battery, IPX5 splash proof
+earbuds|Air Wireless Earbuds|Electronics|Voltix|1799|2499|4.2|21|🎧|Bluetooth 5.3, 24 h with case, touch controls
+bank|Power Bank 10000 mAh|Electronics|Voltix|999|1299|4.2|22|🔋|22.5 W fast charging, dual output
+cable|USB-C Cable 1 m|Electronics|Voltix|249|349|4.0|0|🔌|Braided cable, 60 W charging and data
+tee|Cotton Crew T-Shirt|Fashion|Urbanly|599|799|4.1|50|👕|100% combed cotton, regular fit
+jacket|Washed Denim Jacket|Fashion|Urbanly|2199|2999|4.3|9|🧥|Mid-weight denim, button front, two chest pockets
+shoes|Cushion Running Shoes|Fashion|Stridex|1999|2599|4.4|14|👟|Breathable mesh upper, light EVA midsole
+cap|Sports Cap|Fashion|Stridex|349|449|3.9|35|🧢|Quick-dry fabric with adjustable strap
+wallet|Leather Bifold Wallet|Accessories|Kovra|699|899|4.2|28|👛|Genuine leather, 6 card slots and coin pocket
+watch|Classic Analog Watch|Accessories|Kovra|1799|2399|4.5|8|⌚|Stainless steel case, 3 ATM water resistance
+shades|Polarised Sunglasses|Accessories|Kovra|899|1199|4.0|20|🕶️|UV400 lenses, lightweight frame
+bag|Laptop Backpack 15.6 in|Accessories|Trekko|1299|1799|4.4|16|🎒|Padded laptop sleeve, water-resistant fabric
+lamp|LED Table Lamp|Home Decor|Lumio|1199|1499|4.3|11|💡|3 brightness levels, flexible neck, USB powered
+clock|Round Wall Clock 30 cm|Home Decor|Lumio|749|999|4.1|13|🕰️|Silent sweep movement, wooden frame
+notes|A5 Notebook Set of 3|Home Decor|Paperly|299|399|4.2|3|📓|Ruled pages, 120 GSM paper, soft cover
+yoga|Yoga Mat 6 mm|Sports|Stridex|699|999|4.3|26|🧘|Non-slip textured surface, carry strap included
+dumbbell|Hex Dumbbell Pair 2 x 5 kg|Sports|Stridex|1399|1899|4.4|10|🏋️|Rubber-coated, anti-roll hex heads
+skip|Speed Skipping Rope|Sports|Stridex|249|349|4.0|32|🪢|Adjustable length, ball-bearing handles`.split('\n').map(l=>{const a=l.split('|');return{id:a[0],name:a[1],cat:a[2],brand:a[3],price:+a[4],mrp:+a[5],rating:+a[6],stock:+a[7],ico:a[8],desc:a[9]}});
+const byId=id=>P.find(p=>p.id===id);
+const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const $=s=>document.querySelector(s),app=$('#app');
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const inr=n=>'₹'+n.toLocaleString('en-IN');
+const me=()=>{const e=LS.get('nm_session',null);const u=LS.get('nm_users',{})[e];return u||null};
+const cartKey=()=>'nm_cart_'+me().email,ordKey=()=>'nm_orders_'+me().email;
+const getCart=()=>LS.get(cartKey(),{}),setCart=c=>LS.set(cartKey(),c);
+const avail=id=>Math.max(0,byId(id).stock-(LS.get('nm_sold',{})[id]||0));
+const cartTotal=c=>Object.keys(c).reduce((s,id)=>s+byId(id).price*c[id],0);
+const cartCount=()=>me()?Object.values(getCart()).reduce((a,b)=>a+b,0):0;
+async function hash(pw,salt){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(salt+pw));return Array.from(new Uint8Array(b),x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return btoa(salt+pw)}}
+const rnd=(n,al)=>Array.from(crypto.getRandomValues(new Uint8Array(n)),b=>al[b%al.length]).join('');
+let flash='',pend=null,placing=false,modalOpen=false,filt={q:'',cat:'All',max:'',sort:'featured'},conf=null,tt;
+function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,3200)}
+function ask(html,yes,no,onYes,onNo){const m=$('#modal');modalOpen=true;m.hidden=false;m.innerHTML=`<div class="card" role="dialog" aria-modal="true"><p style="margin-top:0">${html}</p><div style="display:flex;gap:.6rem;justify-content:flex-end"><button class="btn" data-testid="modal-no">${no}</button><button class="btn p" data-testid="modal-yes">${yes}</button></div></div>`;
+ m.querySelector('[data-testid=modal-yes]').onclick=()=>{close();onYes()};m.querySelector('[data-testid=modal-no]').onclick=()=>{close();onNo&&onNo()};function close(){m.hidden=true;m.innerHTML='';modalOpen=false}}
+const header=()=>{const u=me();return `<header><a class="brand" href="#/">NovaMart</a>`+(u?`<nav><a href="#/shop">Home</a><a href="#/cart" data-testid="nav-cart">Cart<span class="badge" data-testid="cart-count">${cartCount()}</span></a><a href="#/orders">Orders</a><a href="#/profile">Profile</a><span class="mut">Hi, ${esc(u.name.split(' ')[0])}</span><button class="btn" data-act="out">Sign out</button></nav>`:`<nav><a href="#/signin">Sign in</a><a class="btn p" href="#/signup">Sign up</a></nav>`)+`</header>`};
+const view=h=>app.innerHTML=header()+`<main>${h}</main>`;
+
+function landing(){view(`<section class="hero"><h1>Shop smarter with NovaMart</h1><p>Kitchen, electronics, fashion, sports and more. Create a free account to browse, save your cart and place orders.</p><a class="btn w" href="#/signup" data-testid="hero-signup">Create account</a> <a class="btn" style="background:transparent;color:#fff;border-color:#fff" href="#/signin" data-testid="hero-signin">Sign in</a></section><p class="mut" style="text-align:center">Demo store with fictional brands. Ratings are sample data.</p>`)}
+function signin(){view(`<div class="card auth"><h2 style="margin-top:0">Sign in</h2>${flash?`<p class="err" data-testid="flash">${esc(flash)}</p>`:''}<form id="f-in" novalidate><label for="ident">Email or mobile number</label><input id="ident" autocomplete="username"><label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password"><p class="err" role="alert" data-testid="form-error" hidden></p><button class="btn p" style="width:100%;margin-top:.8rem">Sign in</button></form><p class="mut">New here? <a href="#/signup">Create an account</a></p></div>`)}
+function signup(){if(pend&&pend.code)return signupCode();view(`<div class="card auth"><h2 style="margin-top:0">Create your account</h2><form id="f-up" novalidate><label for="n">Full name</label><input id="n" autocomplete="name"><label for="ph">Mobile number</label><input id="ph" inputmode="numeric" maxlength="10" autocomplete="tel"><label for="em">Email</label><input id="em" type="email" autocomplete="email"><label for="pw">Password (8+ characters, letters and numbers)</label><input id="pw" type="password" autocomplete="new-password"><p class="err" role="alert" data-testid="form-error" hidden></p><button class="btn p" style="width:100%;margin-top:.8rem" data-testid="send-code">Send verification code</button></form><p class="mut">Already registered? <a href="#/signin">Sign in</a></p></div>`)}
+function signupCode(){view(`<div class="card auth"><h2 style="margin-top:0">Verify your number</h2><p class="mut">We sent a 6-digit code to ${esc(pend.phone)}.</p><div class="demo">Demo mode: no SMS is sent. Your code is <b data-testid="demo-code">${pend.code}</b></div><form id="f-code" novalidate><label for="cd">Verification code</label><input id="cd" inputmode="numeric" maxlength="6"><p class="err" role="alert" data-testid="form-error" hidden></p><button class="btn p" style="width:100%;margin-top:.8rem">Verify and create account</button></form><p class="mut"><a href="#/signup" data-act="back">Change details</a></p></div>`)}
+function drawGrid(){let l=P.filter(p=>{const q=filt.q.trim().toLowerCase();return(!q||[p.name,p.brand,p.cat,p.desc].join(' ').toLowerCase().includes(q))&&(filt.cat==='All'||p.cat===filt.cat)&&(!filt.max||p.price<=+filt.max)});
+ const s={featured:(a,b)=>P.indexOf(a)-P.indexOf(b),low:(a,b)=>a.price-b.price,high:(a,b)=>b.price-a.price,rating:(a,b)=>b.rating-a.rating,off:(a,b)=>(b.mrp-b.price)/b.mrp-(a.mrp-a.price)/a.mrp};l.sort(s[filt.sort]);
+ $('#count').textContent=l.length+' product'+(l.length===1?'':'s');
+ $('#grid').innerHTML=l.length?l.map(p=>{const a=avail(p.id),off=Math.round((p.mrp-p.price)/p.mrp*100);return `<div class="card pc" data-testid="product-${p.id}"><div class="tile" data-ico="${p.ico}"><img src="images/${p.id}.jpg" alt="${esc(p.name)}" loading="lazy"></div><b>${esc(p.name)}</b><span class="mut">${p.brand} · ${p.cat}</span><span class="mut">${esc(p.desc)}</span><span class="mut">★ ${p.rating.toFixed(1)} (sample rating)</span><div><span class="price">${inr(p.price)}</span><span class="mrp">${inr(p.mrp)}</span><span class="off">${off}% off</span></div><span class="${a?'ok':'err'}" style="font-size:.85rem">${a?(a<=5?'Only '+a+' left':'In stock'):'Out of stock'}</span><button class="btn p" data-act="add" data-id="${p.id}" data-testid="add-${p.id}" ${a?'':'disabled'}>${a?'Add to cart':'Unavailable'}</button></div>`}).join(''):`<p data-testid="empty-results">No products match your search. <a href="#/shop" data-act="clear">Clear filters</a></p>`}
+function shop(){const cats=['All',...new Set(P.map(p=>p.cat))];view(`<div class="bar"><input id="q" placeholder="Search products, brands, categories" value="${esc(filt.q)}" data-testid="search"><select id="cat" data-testid="cat">${cats.map(c=>`<option ${c===filt.cat?'selected':''}>${c}</option>`).join('')}</select><input id="max" type="number" min="0" placeholder="Max price ₹" value="${esc(filt.max)}" data-testid="max"><select id="sort" data-testid="sort"><option value="featured">Featured</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option><option value="rating">Top rated</option><option value="off">Biggest discount</option></select><button class="btn" data-act="clear">Clear</button></div><p class="mut" id="count"></p><div class="grid" id="grid"></div>`);$('#sort').value=filt.sort;drawGrid()}
+function cart(){const c=getCart(),ids=Object.keys(c);view(`<h2>Your cart</h2>`+(ids.length?`<div class="cols"><div class="card"><table><thead><tr><th>Item</th><th>Price</th><th>Qty</th><th>Total</th><th></th></tr></thead><tbody>${ids.map(id=>{const p=byId(id);return `<tr data-testid="cart-row-${id}"><td>${p.ico} ${esc(p.name)}</td><td>${inr(p.price)}</td><td><span class="q"><button class="btn" data-act="dec" data-id="${id}" aria-label="Decrease">−</button><span data-testid="qty-${id}">${c[id]}</span><button class="btn" data-act="inc" data-id="${id}" aria-label="Increase">+</button></span></td><td data-testid="line-total-${id}">${inr(p.price*c[id])}</td><td><button class="btn" data-act="rm" data-id="${id}" data-testid="remove-${id}">Remove</button></td></tr>`}).join('')}</tbody></table></div><div class="card"><p>Order total</p><p class="tot" data-testid="order-total">${inr(cartTotal(c))}</p><a class="btn p" style="width:100%;text-align:center" href="#/checkout" data-testid="checkout-btn">Proceed to checkout</a></div></div>`:`<div class="card"><p data-testid="empty-cart">Your cart is empty.</p><a class="btn p" href="#/shop">Start shopping</a></div>`))}
+function checkout(){const c=getCart(),ids=Object.keys(c);if(conf)return confirmation();view(`<h2>Checkout</h2>`+(ids.length?'':`<p class="err" data-testid="cart-error">Your cart is empty. Add an item before placing an order.</p>`)+`<div class="cols"><form class="card" id="f-co" novalidate><label for="nm">Full name (required)</label><input id="nm" value="${esc(me().name)}" autocomplete="name"><p class="err" role="alert" data-testid="name-error" hidden></p><label>Payment method</label><select id="pm" data-testid="pay-method"><option value="card">Card</option><option value="cod">Cash on delivery</option></select><div id="cardbox"><label for="cn">Card number</label><input id="cn" inputmode="numeric" placeholder="4242 4242 4242 4242"><p class="mut">Demo card 4242 4242 4242 4242 succeeds. 4000 0000 0000 0002 is declined. No real payment is made.</p></div><p class="err" role="alert" data-testid="form-error" hidden></p><button class="btn p" id="place" style="width:100%;margin-top:.8rem" data-testid="place-order">Place Order</button></form><div class="card"><b>Summary</b>${ids.map(id=>`<p>${esc(byId(id).name)} × ${c[id]} <span style="float:right">${inr(byId(id).price*c[id])}</span></p>`).join('')}<p class="tot" data-testid="order-total">${inr(cartTotal(c))}</p></div></div>`)}
+function confirmation(){view(`<div class="card auth" data-testid="confirmation"><h2 style="margin-top:0" class="ok">Order confirmed</h2><p>Thank you, ${esc(conf.name)}. Your order has been placed.</p><p>Order reference: <b data-testid="order-reference">${conf.ref}</b></p><p>Amount: <b data-testid="confirmed-total">${inr(conf.total)}</b> (${conf.pay})</p><a class="btn p" href="#/orders">View orders</a> <a class="btn" href="#/shop">Continue shopping</a></div>`)}
+function orders(){const o=LS.get(ordKey(),[]);view(`<h2>Your orders</h2>`+(o.length?o.map(x=>`<div class="card" style="margin-bottom:.8rem" data-testid="order-${x.ref}"><b>${x.ref}</b> <span class="mut">${new Date(x.at).toLocaleString('en-IN')}</span><p>${x.items.map(i=>esc(i.name)+' × '+i.qty).join(', ')}</p><b>${inr(x.total)}</b> <span class="mut">· ${x.pay}</span></div>`).join(''):`<div class="card"><p data-testid="no-orders">No orders yet.</p></div>`))}
+function profile(){const u=me();view(`<h2>Your profile</h2><form class="card auth" style="margin:0" id="f-pr" novalidate><label for="pn">Full name</label><input id="pn" value="${esc(u.name)}"><label>Email</label><input value="${esc(u.email)}" disabled><label>Mobile</label><input value="${esc(u.phone)}" disabled><label for="ad">Delivery address</label><textarea id="ad" rows="3">${esc(u.address||'')}</textarea><p class="err" role="alert" data-testid="form-error" hidden></p><button class="btn p" style="margin-top:.8rem">Save profile</button></form>`)}
+
+function route(){const h=location.hash||'#/',u=me(),pub=['#/','#/signin','#/signup'];
+ if(!u&&!pub.includes(h)){flash='Please sign in to continue.';location.hash='#/signin';return}
+ if(u&&pub.includes(h)){location.hash='#/shop';return}
+ if(h!=='#/checkout')conf=null;if(h!=='#/signin')flash='';
+ ({'#/':landing,'#/signin':signin,'#/signup':signup,'#/shop':shop,'#/cart':cart,'#/checkout':checkout,'#/orders':orders,'#/profile':profile}[h]||(u?shop:landing))()}
+addEventListener('hashchange',route);
+document.addEventListener('error',e=>{const i=e.target;if(i&&i.tagName==='IMG'&&i.parentElement.dataset.ico){const t=i.parentElement;t.textContent=t.dataset.ico}},true);
+const err=(m)=>{const e=$('[data-testid=form-error]');e.textContent=m;e.hidden=!m;return false};
+const stockProblem=c=>Object.keys(c).map(id=>c[id]>avail(id)?byId(id).name+' has only '+avail(id)+' left':'').find(Boolean);
+
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act,id=b.dataset.id;
+ if(a==='out'){LS.set('nm_session',null);location.hash='#/';route()}
+ if(a==='back'){pend=null}
+ if(a==='clear'){filt={q:'',cat:'All',max:'',sort:'featured'};e.preventDefault();shop()}
+ if(a==='add'){const c=getCart();if(c[id])return toast(byId(id).name+' is already in your cart. Change the quantity from your cart.');
+  ask(`Add <b>${esc(byId(id).name)}</b> (${inr(byId(id).price)}) to your cart?`,'Yes, add','Cancel',()=>{const c2=getCart();if(c2[id])return toast('Already in your cart.');if(avail(id)<1)return toast('Sorry, this item just went out of stock.');c2[id]=1;setCart(c2);$('[data-testid=cart-count]').textContent=cartCount();toast(byId(id).name+' added to cart')})}
+ if(['inc','dec','rm'].includes(a)){const c=getCart();if(a==='inc'){if(c[id]+1>avail(id))return toast('Only '+avail(id)+' in stock.');c[id]++}if(a==='dec')c[id]=Math.max(1,c[id]-1);if(a==='rm')delete c[id];setCart(c);cart()}});
+document.addEventListener('input',e=>{const t=e.target;if(t.id==='q'){filt.q=t.value;drawGrid()}if(t.id==='max'){filt.max=t.value;drawGrid()}});
+document.addEventListener('change',e=>{const t=e.target;if(t.id==='cat'){filt.cat=t.value;drawGrid()}if(t.id==='sort'){filt.sort=t.value;drawGrid()}if(t.id==='pm')$('#cardbox').hidden=t.value==='cod'});
+
+document.addEventListener('submit',async e=>{e.preventDefault();const f=e.target.getAttribute('id'),v=i=>$('#'+i).value.trim();
+ if(f==='f-up'){const name=v('n'),ph=v('ph'),em=v('em').toLowerCase(),pw=$('#pw').value,users=LS.get('nm_users',{});
+  if(!/^[A-Za-z][A-Za-z .'-]{1,59}$/.test(name))return err('Enter your full name (letters only, at least 2 characters).');
+  if(!/^[6-9]\d{9}$/.test(ph))return err('Enter a valid 10-digit mobile number starting with 6, 7, 8 or 9.');
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em))return err('Enter a valid email address.');
+  if(pw.length<8||!/[A-Za-z]/.test(pw)||!/\d/.test(pw))return err('Password must be at least 8 characters with letters and numbers.');
+  if(users[em]||Object.values(users).some(u=>u.phone===ph))return err('An account with this email or mobile number already exists. Please sign in.');
+  pend={name,phone:ph,email:em,pw,code:rnd(6,'0123456789'),tries:0,at:Date.now()};signupCode()}
+ if(f==='f-code'){const c=v('cd');if(!/^\d{6}$/.test(c))return err('Enter the 6-digit code.');
+  if(Date.now()-pend.at>300000){pend=null;return err('This code has expired. Please start again.')}
+  if(c!==pend.code){pend.tries++;if(pend.tries>=3){pend=null;signup();return toast('Too many wrong attempts. Please start again.')}return err('Incorrect code. '+(3-pend.tries)+' attempt(s) left.')}
+  const salt=rnd(8,'abcdef0123456789'),users=LS.get('nm_users',{});users[pend.email]={name:pend.name,phone:pend.phone,email:pend.email,salt,h:await hash(pend.pw,salt),address:''};LS.set('nm_users',users);LS.set('nm_session',pend.email);pend=null;location.hash='#/shop';route();toast('Welcome to NovaMart!')}
+ if(f==='f-in'){const id=v('ident').toLowerCase(),pw=$('#pw').value;if(!id||!pw)return err('Enter your email or mobile number and your password.');
+  const u=Object.values(LS.get('nm_users',{})).find(x=>x.email===id||x.phone===id);if(!u)return err('No account found with these details. Please sign up first.');
+  if(await hash(pw,u.salt)!==u.h)return err('Incorrect password. Please try again.');LS.set('nm_session',u.email);location.hash='#/shop';route()}
+ if(f==='f-pr'){const n=v('pn');if(!/^[A-Za-z][A-Za-z .'-]{1,59}$/.test(n))return err('Enter a valid name.');const us=LS.get('nm_users',{}),u=me();us[u.email].name=n;us[u.email].address=$('#ad').value.trim();LS.set('nm_users',us);toast('Profile saved');profile()}
+ if(f==='f-co'){if(placing||modalOpen)return;const c=getCart(),name=v('nm'),pm=$('#pm').value,cn=($('#cn').value||'').replace(/\s/g,'');
+  $('[data-testid=name-error]').hidden=true;err('');
+  if(!Object.keys(c).length){return err('Your cart is empty. Add an item before placing an order.')}
+  if(!name){const n=$('[data-testid=name-error]');n.textContent='Please enter your full name.';n.hidden=false;return}
+  const sp=stockProblem(c);if(sp)return err(sp+'. Please update your cart.');
+  if(pm==='card'&&!/^\d{16}$/.test(cn))return err('Enter a valid 16-digit card number.');
+  const total=cartTotal(c);
+  ask(`Pay <b>${inr(total)}</b> by ${pm==='card'?'card ending '+cn.slice(-4):'cash on delivery'}?`,'Confirm and pay','Cancel',()=>{placing=true;$('#place').disabled=true;$('#place').textContent='Processing…';
+   setTimeout(()=>{const fail=pm==='card'&&cn==='4000000000000002',sp2=stockProblem(getCart());
+    if(fail||sp2){placing=false;$('#place').disabled=false;$('#place').textContent='Place Order';return err(fail?'Payment declined by your bank. You have not been charged and your cart is unchanged. Try another card or cash on delivery.':sp2+'. Order not placed.')}
+    const sold=LS.get('nm_sold',{}),items=Object.keys(c).map(id=>{sold[id]=(sold[id]||0)+c[id];return{id,name:byId(id).name,qty:c[id],price:byId(id).price}});LS.set('nm_sold',sold);
+    conf={ref:'ORD-'+rnd(8,'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'),name,total,pay:pm==='card'?'Card':'Cash on delivery'};
+    const o=LS.get(ordKey(),[]);o.unshift({ref:conf.ref,at:Date.now(),items,total,pay:conf.pay});LS.set(ordKey(),o);setCart({});placing=false;confirmation()},700)},()=>{err('Order not placed. Your cart is unchanged.')})}});
+route();
+})();
+</script></body></html>
